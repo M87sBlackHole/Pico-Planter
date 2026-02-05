@@ -3,7 +3,7 @@ This is a (simple) passion and learning project designed to gather data on the a
 ## Materials
 The project uses a few components to make everything work together, everything listed below
 - A **Raspberrypi Pico 2 W** as microcontroler (https://www.cytron.io/p-raspberry-pi-pico-2-wireless)
-- A **	Capacitive Soil Moisture Sensor** to measure the amount of water in the soil (https://nl.aliexpress.com/item/32832538686.html)
+- A **Capacitive Soil Moisture Sensor** to measure the amount of water in the soil (https://nl.aliexpress.com/item/32832538686.html)
 - A Laptop capable of running vscode
 - vscode
 - A microusb cable to connect the Pico to the laptop
