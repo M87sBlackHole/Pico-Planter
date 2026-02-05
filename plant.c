@@ -12,9 +12,11 @@
 #define BEACON_MSG_LEN_MAX 127
 #define BEACON_TARGET "255.255.255.255"
 
-#define SAMPLE_TIME 10000
+// define how long in ms the pico waits before measuring & broadcasting again, in this case 15 minutes
+#define SAMPLE_TIME 900000
 
-void broadcastData(int msg) {
+//the function for broadcasting the data gathered
+void broadcastData(int data) {
     struct udp_pcb* pcb = udp_new();
 
     ip_addr_t addr;
@@ -23,18 +25,17 @@ void broadcastData(int msg) {
     struct pbuf *p = pbuf_alloc(PBUF_TRANSPORT, BEACON_MSG_LEN_MAX+1, PBUF_RAM);
     char *req = (char *)p->payload;
     memset(req, 0, BEACON_MSG_LEN_MAX+1);
-    snprintf(req, BEACON_MSG_LEN_MAX, "%d\n", msg);
+    snprintf(req, BEACON_MSG_LEN_MAX, "%d\n", data);
     err_t er = udp_sendto(pcb, p, &addr, UDP_PORT);
     pbuf_free(p);
     if (er != ERR_OK) {
         printf("Failed to send UDP packet! error=%d", er);
     } else {
-        printf("Sent packet : %d\n", msg);
+        printf("Sent packet : %d\n", data);
     }
 }
 
-
-
+//the main loop, gathering data and broadcasting it
 int main()
 {
     stdio_init_all();
@@ -59,18 +60,24 @@ int main()
         printf("IP address %d.%d.%d.%d\n", ip_address[0], ip_address[1], ip_address[2], ip_address[3]);
     }
 
-    //put define pin
+    // defenition of the (adc) pin connected to the moisture sensor
     const int MOIST_PIN = 27;
 
-    //init some things ai told me to init
+    // initiallisation of the liberaries and functions used to get the data from the moisture sensor
     adc_init();
     adc_gpio_init(MOIST_PIN);
     adc_select_input(1);
 
+    // the loop keeping the pico running
     while (true) {
+        // reads the data and converts it into a intiger
         uint16_t  volts = adc_read();
         int data = volts;
+
+        // broadcasts the data into the open
         broadcastData(data);
+
+        //let that pico rest
         sleep_ms(SAMPLE_TIME);
     }
 }
