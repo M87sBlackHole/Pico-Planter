@@ -12,6 +12,9 @@
 #define BEACON_MSG_LEN_MAX 5
 #define BEACON_TARGET "255.255.255.255"
 
+#define WIFI_SSID "Your Wifi SSID"
+#define WIFI_PASSWORD "Your Wifi Password"
+
 // define how long in ms the pico waits before measuring & broadcasting again, in this case 15 minutes
 #define SAMPLE_TIME 900000
 
@@ -58,7 +61,7 @@ int main()
     cyw43_arch_enable_sta_mode();
 
     printf("Connecting to Wi-Fi...\n");
-    if (cyw43_arch_wifi_connect_timeout_ms("Router? I hardly know her", "AylaIsDeGrootsteSchat", CYW43_AUTH_WPA2_AES_PSK, 30000)) {
+    if (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000)) {
         printf("failed to connect.\n");
         return 1;
     } else {
